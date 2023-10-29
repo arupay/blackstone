@@ -1,5 +1,6 @@
 const pgp = require("pg-promise")();
 require("dotenv").config();
+const fs = require('fs');
 
 
 const { RDS_ENDPOINT, RDS_PORT, RDS_DATABASE, RDS_USER, RDS_PASSWORD } = process.env;
@@ -12,7 +13,7 @@ const cn = {
     password: RDS_PASSWORD,
     ssl: {
         rejectUnauthorized: true,
-        ca: fs.readFileSync(__dirname + "/path_to_rds_combined_ca_bundle.pem").toString(),
+        ca: fs.readFileSync('./db/rds-ca-2019-root.pem').toString()
     }
 };
 

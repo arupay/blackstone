@@ -1,10 +1,18 @@
 //Dependencies
 const express = require("express");
 const cors = require("cors")
+const meetingRoomController = require("./controllers/meetingRoomController")
+const bookingsController = require("./controllers/bookingsController")
 
 //Config
 const app = express();
 
+//Middleware
+
+app.use(cors());
+app.use(express.json());
+app.use("/api/meeting-rooms", meetingRoomController);
+app.use("/api/bookings", bookingsController)
 
 //Routes
 app.get("/", (req, res)=>{
