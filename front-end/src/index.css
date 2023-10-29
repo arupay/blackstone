@@ -1,13 +1,23 @@
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Styles for the Nav.Link text */
+.nav-link {
+  font-weight: bold !important;
+  font-size: 25px !important;
+  transition: all 0.5s;
+  color: initial !important;
+
+}
+
+/* Hover effects */
+.nav-link:hover {
+  font-size: 27px !important;
+}
+
+
+.room-card:hover {
+  background-color: rgb(237, 235, 235);
 }
