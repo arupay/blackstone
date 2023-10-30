@@ -3,9 +3,9 @@ require("dotenv").config();
 const fs = require('fs');
 
 
-const { RDS_ENDPOINT, RDS_PORT, RDS_DATABASE, RDS_USER, RDS_PASSWORD } = process.env;
+const isProduction = process.env.NODE_ENV === 'development';
 
-const cn = {
+const cn = isProduction ? {
     host: RDS_ENDPOINT,
     port: RDS_PORT,
     database: RDS_DATABASE,
@@ -15,6 +15,11 @@ const cn = {
         rejectUnauthorized: true,
         ca: fs.readFileSync('./db/rds-ca-2019-root.pem').toString()
     }
+} : {
+    host: process.env.PG_HOST,
+    port: process.env.PG_PORT,
+    database: process.env.PG_DATABASE,
+    user: process.env.PG_USER,
 };
 
 const db = pgp(cn);
