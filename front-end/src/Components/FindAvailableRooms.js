@@ -29,7 +29,7 @@ function FindAvailableRooms() {
               showTimeSelect
               filterTime={filterPassedTime}
               timeFormat="hh:mm aa"
-              timeIntervals={15}
+              timeIntervals={30}
               dateFormat="MM/dd/yyyy h:mm aa"
               className="form-control"
             />
@@ -47,7 +47,7 @@ function FindAvailableRooms() {
               showTimeSelect
               filterTime={filterPassedTime}
               timeFormat="hh:mm aa"
-              timeIntervals={15}
+              timeIntervals={30}
               dateFormat="MM/dd/yyyy h:mm aa"
               className="form-control"
             />

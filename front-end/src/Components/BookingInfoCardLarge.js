@@ -1,12 +1,17 @@
 import { TbClockPlay, TbClockStop } from "react-icons/tb";
 import { BsBuilding } from "react-icons/bs";
 import formatDate from "../utilities/formatDate";
+import { useNavigate } from "react-router-dom";
 
 function BookingInfoCardLarge(props) {
+  const navigate = useNavigate();
   const { booking } = props;
   return (
     <div className="mt-3">
-      <div className="card mb-2 room-card">
+      <div
+        className="card mb-2 room-card"
+        onClick={() => navigate(`/bookings/${booking.id}`)}
+      >
         <div className="card-body">
           <h4 className="card-title mb-3">{booking.meeting_name} </h4>
           <h6 className=" mb-2">{booking.name} </h6>

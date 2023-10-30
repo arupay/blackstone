@@ -4,7 +4,7 @@ import { Button } from "react-bootstrap";
 import formatDate from "../utilities/formatDate";
 
 function SingleBookingDetails(props) {
-  const { meetingDetails } = props;
+  const { meetingDetails, onDelete } = props;
   return (
     <div className="mt-3">
       <div className="card mb-2 room-card">
@@ -26,7 +26,9 @@ function SingleBookingDetails(props) {
             <BsBuilding size="2em" />
             <span className="mx-2">Floor: {meetingDetails.floor}</span>
           </div>
-          <Button variant="danger">Cancel</Button>
+          <Button onClick={onDelete} variant="danger">
+            Cancel
+          </Button>
         </div>
       </div>
     </div>
