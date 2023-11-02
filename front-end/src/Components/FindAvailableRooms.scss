@@ -3,16 +3,15 @@
     height: 100%;
     padding: 1em;
     display: flex;         /* Make this a flex container */
-    justify-content: center; /* Horizontally center its children */
-    align-items: center;     /* Vertically center its children */
+    justify-content: center; 
+
     
     @media screen and (min-width: 768px) {
         padding: 1em;
     } 
-
     &__newform{
         border-radius: 20px;
-        width:75%;
+        width:70%;
         background-color: rgb(244, 238, 238);
         
         @media screen and (min-width: 768px) {
@@ -24,10 +23,10 @@
             display: block;
             margin-bottom: 5px;
             font-weight: 550;
-            font-size:.75em;
+            font-size:.85em;
             letter-spacing: 2px;
             width: 100%;
-            margin-bottom: 8px;
+            margin-bottom: 12px;
             color: #444
         }
 
@@ -51,9 +50,6 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: space-between;
-        }
-        .smallgroup {
-            width: 45%;
         }
       
 }
@@ -79,13 +75,26 @@
 }
 
 .disabled-datepicker-placeholder {
-    width: 200px;
+    width: 325px;
     height: 200px;
-    background-size: cover;
+    background-image:url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"><circle fill="%23190731" stroke="%23190731" stroke-width="15" r="15" cx="40" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.4"></animate></circle><circle fill="%23190731" stroke="%23190731" stroke-width="15" r="15" cx="100" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="-.2"></animate></circle><circle fill="%23190731" stroke="%23190731" stroke-width="15" r="15" cx="160" cy="100"><animate attributeName="opacity" calcMode="spline" dur="2" values="1;0;1;" keySplines=".5 0 .5 1;.5 0 .5 1" repeatCount="indefinite" begin="0"></animate></circle></svg>');
     background-repeat: no-repeat;
     background-position: center;
     display: flex;
     justify-content: center;
     align-items: center;
-    color: #aaa;
   }
+
+.spinner-text{
+    color: #fff;
+    font-weight: 600;
+    text-transform: uppercase;
+    align-self: flex-end;
+    padding: 0.5em;
+    font-size: 20px;
+    text-shadow:
+    0.07em 0 black,
+    0 0.07em black,
+    -0.07em 0 black,
+    0 -0.07em black;
+}

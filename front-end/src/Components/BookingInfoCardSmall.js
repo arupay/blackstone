@@ -1,34 +1,49 @@
 import { TbClockPlay, TbClockStop } from "react-icons/tb";
 import { formatDate } from "../utilities/formatDate";
+import { getMonthAbbreviation } from "../utilities/formatDate";
+import { getDayOfWeekAbbreviation } from "../utilities/formatDate";
+import { getDayOfMonth } from "../utilities/formatDate";
 import { useNavigate } from "react-router-dom";
+import "./BookingInfoCardSmall.scss";
 
 function BookingInfoCardSmall(props) {
   const { meeting } = props;
   const navigate = useNavigate();
 
+  const dayOfMonth = getDayOfMonth(meeting.start_date);
+  const monthAbbreviation = getMonthAbbreviation(meeting.start_date);
+  const weekdayAbrev = getDayOfWeekAbbreviation(meeting.start_date);
+
   return (
-    <div className="mt-3">
-      <div
-        className="card mb-2 room-card"
-        onClick={() => navigate(`/bookings/${meeting.id}`)}
-      >
-        <div className="card-body">
-          <h5 className="card-title">{meeting.meeting_name}</h5>
-          <div className="d-flex align-items-center mb-2">
-            <TbClockPlay size="2em" />
-            <span className="mx-2">
-              Start Time: {formatDate(meeting.start_date)}
+    <article className="bkcard fl-left">
+      <section className="bkdate">
+        <time>
+          <span className="bkdate-weekday">{weekdayAbrev}</span>
+          <span className="bkdate-day">{dayOfMonth}</span>
+          <span className="bkdate-month">{monthAbbreviation}</span>
+        </time>
+      </section>
+      <section className="bkcard-cont">
+        <h3 style={{ paddingBottom: "10px" }}>{meeting.meeting_name}</h3>
+        <div className="even-date">
+          <time>
+            <span>
+              <TbClockPlay size="1.5em" />
+              {"   "}
+              Start: {formatDate(meeting.start_date)}
             </span>
-          </div>
-          <div className="d-flex align-items-center">
-            <TbClockStop size="2em" />
-            <span className="mx-2">
-              End Time: {formatDate(meeting.end_date)}
+            <span>
+              <TbClockStop size="1.5em" />
+              {"   "}
+              End: {formatDate(meeting.end_date)}
             </span>
-          </div>
+          </time>
         </div>
-      </div>
-    </div>
+        <div className="even-info">
+          <a onClick={() => navigate(`/bookings/${meeting.id}`)}>view</a>
+        </div>
+      </section>
+    </article>
   );
 }
 export default BookingInfoCardSmall;

@@ -1,0 +1,55 @@
+.truckindex{
+    text-align: center;
+
+}
+
+.backgroundimg{
+    background: #052d44;
+    border: none;
+    color: #FFFFFF;
+    margin-bottom:1rem;
+    font-weight: 400;
+    box-shadow: 0 0 12px 0 rgba(0,0,0,0.2);
+    overflow: hidden;
+    border-radius:10px;
+    background-size:cover; 
+    background-position:center center; 
+    background-repeat:no-repeat;
+    min-height:350px;
+    transition: transform 3s ease;
+    -webkit-transition: all 0.3s ease-in-out;
+
+    @media (max-width: 768px){
+        min-height:350px;
+    }
+    @media (max-width: 420px) {
+        min-height:300px;
+    }
+
+    &:hover{
+        transform: scale(0.98);
+        transition: all .3s linear;
+    }
+    &__trucktitle {
+        margin-top:80px !important;
+        font-size: 32px !important;
+        font-weight: 600 !important;
+        color: #f7e0c8 !important;
+    }
+}
+
+
+
+.card-img-overlay {
+    background: linear-gradient(0deg, rgba(0,0,0,0.5) 25%, rgb(57, 59, 65) 100%);
+       color: white;
+
+}
+  
+  
+  
+.card-img-overlay:hover {
+    transition: all .3s linear;
+    color: white;
+    cursor: pointer; 
+}

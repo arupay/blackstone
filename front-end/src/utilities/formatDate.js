@@ -26,3 +26,19 @@ export function convertToUTCString(date) {
   const formattedString = isoString.replace("T", " ").split(".")[0];
   return `${formattedString} UTC`;
 }
+// Gets only the start date in a human-readable format.
+export function getDayOfMonth(isoString) {
+  const date = new Date(isoString);
+  return date.getDate().toString();
+}
+
+// Gets only the first 3 letters of the month.
+export function getMonthAbbreviation(isoString) {
+  const date = new Date(isoString);
+  return date.toLocaleDateString("en-US", { month: "short" });
+}
+
+export function getDayOfWeekAbbreviation(isoString) {
+  const date = new Date(isoString);
+  return date.toLocaleDateString("en-US", { weekday: "short" });
+}

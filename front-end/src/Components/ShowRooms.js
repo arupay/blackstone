@@ -1,34 +1,51 @@
 import React from "react";
 import { BsPeople, BsBuilding } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { Container, Card, Row } from "react-bootstrap";
+import "./ShowRooms.scss";
+import meetingroom from "../assets/stockmeetingroom.webp";
 
 function ShowRooms(props) {
   const { rooms } = props;
   const navigate = useNavigate();
   return (
-    <div className="mt-3">
-      {rooms && rooms.length
-        ? rooms.map((room) => (
-            <div
-              key={room.id}
-              className="card mb-2 room-card"
-              onClick={() => navigate(`/meetingrooms/${room.id}`)}
-            >
-              <div className="card-body">
-                <h5 className="card-title">{room.name}</h5>
-                <div className="d-flex align-items-center mb-2">
-                  <BsPeople size="2em" />
-                  <span className="mx-2">Capacity: {room.capacity}</span>
-                </div>
-                <div className="d-flex align-items-center">
-                  <BsBuilding size="2em" />
-                  <span className="mx-2">Floor: {room.floor}</span>
-                </div>
+    <Container className="truckindex mt-4">
+      <Row>
+        {rooms && rooms.length
+          ? rooms.map((room) => (
+              <div className="sm-12 col-md-6 col-lg-4 mb-3" key={room.id}>
+                <Card
+                  className="backgroundimg"
+                  style={{
+                    backgroundImage: `url(${meetingroom})`,
+                  }}
+                >
+                  <div
+                    className="card-img-overlay"
+                    onClick={() => navigate(`/meetingrooms/${room.id}`)}
+                  >
+                    <Card.Body>
+                      <Card.Title className="backgroundimg__trucktitle">
+                        {room.name}
+                      </Card.Title>
+                      <Card.Text tag="div" style={{ fontSize: "16px" }}>
+                        <BsPeople size="2em" />
+                        <span className="mx-2">
+                          Capacity: {room.capacity} Max
+                        </span>
+                      </Card.Text>
+                      <Card.Text tag="div" style={{ fontSize: "16px" }}>
+                        <BsBuilding size="2em" />
+                        <span className="mx-2">Floor: {room.floor}</span>
+                      </Card.Text>
+                    </Card.Body>
+                  </div>
+                </Card>
               </div>
-            </div>
-          ))
-        : "No Rooms To map"}
-    </div>
+            ))
+          : "No Rooms To map"}
+      </Row>
+    </Container>
   );
 }
 

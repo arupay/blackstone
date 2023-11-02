@@ -4,16 +4,18 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
+import "./BookRoomForm.scss";
+import { BsPeople, BsBuilding } from "react-icons/bs";
 
 const API = process.env.REACT_APP_API_URL;
 
-function BookRoomForm() {
+function BookRoomForm(props) {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [meetingName, setMeetingName] = useState("");
   const [attendees, setAttendees] = useState("");
   const { id } = useParams();
-
+  const { name, floor, capacity } = props.roomInfo;
   const filterPassedTime = (time) => {
     const currentDate = new Date();
     const selectedDate = new Date(time);
@@ -21,23 +23,20 @@ function BookRoomForm() {
   };
 
   const filterEndTime = (time) => {
-    // Filter out times before the current time
     if (!filterPassedTime(time)) return false;
 
-    // Get the hours and minutes for the selected start time
     const startHours = startDate.getHours();
     const startMinutes = startDate.getMinutes();
 
-    // Get the hours and minutes for the currently checked time
     const timeHours = time.getHours();
     const timeMinutes = time.getMinutes();
 
-    // Check if the time is the same as the start time or before it
     return !(
       timeHours < startHours ||
       (timeHours === startHours && timeMinutes <= startMinutes)
     );
   };
+
   //retrieve date used for find booking page.
   useEffect(() => {
     const savedStartDate = localStorage.getItem("startDate");
@@ -94,29 +93,51 @@ function BookRoomForm() {
         console.error("Error submitting the booking:", error);
       });
   };
+  const clearForm = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setMeetingName("");
+    setAttendees("");
+    localStorage.removeItem("startDate");
+    localStorage.removeItem("endDate");
+  };
 
   return (
-    <div className="mt-3">
-      <h5>Book Room:</h5>
-      <Form onSubmit={submitBookingRequest}>
-        <Form.Group as={Row}>
-          <Form.Label column sm="2">
-            Meeting Name:
-          </Form.Label>
-          <Col sm="6">
+    <div className="mt-3 formcontainerbrf">
+      <Form
+        onSubmit={submitBookingRequest}
+        className="formcontainerbrf__newformbrf"
+      >
+        <div className="info">
+          <h5>{name}</h5>
+          <div>
+            <BsBuilding size="2em" className="mx-2" />
+            {floor}
+          </div>
+          <div>
+            <BsPeople size="2em" className="mx-2" /> {capacity}
+          </div>
+        </div>
+        <div className="largegroupbrf" style={{ paddingTop: "125px" }}>
+          <Form.Group className=" smallgroupbrf">
+            <Form.Label>Meeting Name:</Form.Label>
             <Form.Control
               type="text"
               value={meetingName}
               onChange={(e) => setMeetingName(e.target.value)}
             />
-          </Col>
-        </Form.Group>
+          </Form.Group>
+          <Form.Group className=" smallgroupbrf">
+            <Form.Label>Attendee List:</Form.Label>
+            <Form.Control
+              type="text"
+              value={attendees}
+              onChange={(e) => setAttendees(e.target.value)}
+            />
+          </Form.Group>
+          <Form.Group className=" smallgroupbrf">
+            <Form.Label>Start Date & Time:</Form.Label>
 
-        <Form.Group as={Row}>
-          <Form.Label column sm="2">
-            Start:
-          </Form.Label>
-          <Col sm="6">
             <DatePicker
               selected={startDate}
               onChange={(date) => setStartDate(date)}
@@ -126,47 +147,48 @@ function BookRoomForm() {
               timeIntervals={30}
               dateFormat="MM/dd/yyyy h:mm aa"
               className="form-control"
+              inline
             />
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row}>
-          <Form.Label column sm="2">
-            End:
-          </Form.Label>
-          <Col sm="6">
-            <DatePicker
-              selected={endDate}
-              onChange={(date) => setEndDate(date)}
-              showTimeSelect
-              filterTime={filterEndTime}
-              timeFormat="hh:mm aa"
-              timeIntervals={30}
-              dateFormat="MM/dd/yyyy h:mm aa"
-              className="form-control"
-              disabled={
-                !startDate || startDate.getTime() === new Date().getTime()
-              } //disabed until starttime is chosen
-            />
-          </Col>
-        </Form.Group>
-
-        <Form.Group as={Row}>
-          <Form.Label column sm="2">
-            Attendees:
-          </Form.Label>
-          <Col sm="6">
-            <Form.Control
-              type="text"
-              value={attendees}
-              onChange={(e) => setAttendees(e.target.value)}
-            />
-          </Col>
-        </Form.Group>
-
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
+          </Form.Group>
+          <Form.Group className="smallgroupbrf">
+            <Form.Label>End Date & Time:</Form.Label>
+            {startDate ? (
+              <DatePicker
+                selected={endDate}
+                onChange={(date) => setEndDate(date)}
+                showTimeSelect
+                filterTime={filterEndTime}
+                timeFormat="hh:mm aa"
+                timeIntervals={30}
+                dateFormat="MM/dd/yyyy h:mm aa"
+                className="form-control"
+                inline
+              />
+            ) : (
+              <div className=" disabled-datepicker-placeholder">
+                <div style={{ alignSelf: "flex-end" }}>
+                  Select Start Time To Begin
+                </div>
+              </div>
+            )}
+          </Form.Group>
+        </div>
+        <div
+          className="d-flex justify-content-end mx-auto"
+          style={{ paddingRight: "50px" }}
+        >
+          <button
+            type="button"
+            className="submitroomfindbrf"
+            style={{ backgroundColor: "#fff" }}
+            onClick={clearForm}
+          >
+            clear
+          </button>
+          <button type="submit" className="submitroomfindbrf">
+            Book
+          </button>
+        </div>
       </Form>
     </div>
   );

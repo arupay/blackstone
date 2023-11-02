@@ -31,17 +31,23 @@ function SingleMeetingRoom(props) {
       });
   }, [id]);
   return (
-    <Container className="mt-4">
-      <MeetingRoomInfoBar roomInfo={roomInfo} />
-      <hr className="dark-line" />
-      <BookRoomForm />
-      <hr className="dark-line" />
-      {meetings.length
-        ? meetings.map((meeting) => (
-            <BookingInfoCardSmall key={meeting.id} meeting={meeting} />
-          ))
-        : "No future bookings found for this meeting room"}
-    </Container>
+    <div>
+      <span className="index-title reverse">
+        <h1 className="index-title-text reverse">Book A Room</h1>
+      </span>
+      {/* <MeetingRoomInfoBar roomInfo={roomInfo} /> */}
+      <Container className="mt-4">
+        <BookRoomForm roomInfo={roomInfo} />
+        <hr className="dark-line" />
+        <h2 className="booklist-single">Bookings</h2>
+
+        {meetings.length
+          ? meetings.map((meeting) => (
+              <BookingInfoCardSmall key={meeting.id} meeting={meeting} />
+            ))
+          : "No future bookings found for this meeting room"}
+      </Container>
+    </div>
   );
 }
 

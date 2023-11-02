@@ -5,7 +5,6 @@ import "react-datepicker/dist/react-datepicker.css";
 import { convertToUTCString } from "../utilities/formatDate";
 import axios from "axios";
 import "./FindAvailableRooms.scss";
-import search from "../assets/search.png"; // adjust the path and image name accordingly
 
 const API = process.env.REACT_APP_API_URL;
 function FindAvailableRooms({ setRooms }) {
@@ -20,25 +19,25 @@ function FindAvailableRooms({ setRooms }) {
     return currentDate.getTime() < selectedDate.getTime();
   };
   const filterEndTime = (time) => {
-    // Filter out times before the current time
     if (!filterPassedTime(time)) return false;
 
-    // Get the hours and minutes for the selected start time
     const startHours = startDate.getHours();
     const startMinutes = startDate.getMinutes();
 
-    // Get the hours and minutes for the currently checked time
     const timeHours = time.getHours();
     const timeMinutes = time.getMinutes();
 
-    // Check if the time is the same as the start time or before it
     return !(
       timeHours < startHours ||
       (timeHours === startHours && timeMinutes <= startMinutes)
     );
   };
   const handleFilterSubmit = async (event) => {
-    event.preventDefault(); // prevent default form submission
+    event.preventDefault();
+    if (!startDate || !endDate) {
+      alert("All fields must be filled!");
+      return;
+    }
 
     try {
       const requestBody = {
@@ -61,13 +60,10 @@ function FindAvailableRooms({ setRooms }) {
 
   return (
     <div className="mt-3 formcontainer">
-      <Form
-        onSubmit={handleFilterSubmit}
-        className="addtruckform formcontainer__newform"
-      >
+      <Form onSubmit={handleFilterSubmit} className="formcontainer__newform">
         <div className="largegroup">
-          <Form.Group className="mb-2 smallgroup">
-            <Form.Label>Start:</Form.Label>
+          <Form.Group className=" smallgroup">
+            <Form.Label>Start Date & Time:</Form.Label>
 
             <DatePicker
               selected={startDate}
@@ -81,8 +77,8 @@ function FindAvailableRooms({ setRooms }) {
               inline
             />
           </Form.Group>
-          <Form.Group className="mb-2 smallgroup">
-            <Form.Label>End:</Form.Label>
+          <Form.Group className="smallgroup">
+            <Form.Label>End Date & Time:</Form.Label>
             {startDate ? (
               <DatePicker
                 selected={endDate}
@@ -96,13 +92,13 @@ function FindAvailableRooms({ setRooms }) {
                 inline
               />
             ) : (
-              <div className=" disabled-datepicker-placeholder">
-                Select a start date & time
+              <div className="disabled-datepicker-placeholder">
+                {/* <div className="spinner-text"> Select a start date & time</div> */}
               </div>
             )}
           </Form.Group>
 
-          <Form.Group className="smallgroup">
+          <Form.Group className="smallgroup mt-2">
             <Form.Label>Floor:</Form.Label>
             <Form.Control
               type="number"
@@ -111,8 +107,8 @@ function FindAvailableRooms({ setRooms }) {
             />
           </Form.Group>
 
-          <Form.Group className="smallgroup">
-            <Form.Label>Capacity:</Form.Label>
+          <Form.Group className="smallgroup mt-2">
+            <Form.Label>Room Capacity:</Form.Label>
 
             <Form.Control
               type="number"
@@ -121,7 +117,7 @@ function FindAvailableRooms({ setRooms }) {
             />
           </Form.Group>
         </div>
-        <div className="text-center m-auto">
+        <div className="d-flex justify-content-center mx-auto">
           <button type="submit" className="submitroomfind">
             Find
           </button>

@@ -1,12 +1,16 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import AddRoomBirdsEye from "../assets/AddRoomBirdsEye.png";
+import "./NewRoom.scss";
 const API = process.env.REACT_APP_API_URL;
 
 function NewRoom(props) {
   const [roomName, setRoomName] = useState("");
   const [floor, setFloor] = useState("");
   const [capacity, setCapacity] = useState("");
+  const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
     const roomData = {
@@ -20,6 +24,7 @@ function NewRoom(props) {
         setRoomName("");
         setFloor("");
         setCapacity("");
+        navigate(`/`);
       })
       .catch((error) => {
         console.log(error);
@@ -28,58 +33,63 @@ function NewRoom(props) {
   };
 
   return (
-    <div className="mt-3">
-      <h5 className="mb-3">Create a Room</h5>
-      <Form onSubmit={handleSubmit}>
-        <Form.Group as={Row}>
-          <Form.Label column sm="2">
-            Room Name:
-          </Form.Label>
-          <Col sm="6">
-            <Form.Control
-              type="text"
-              value={roomName}
-              required
-              onChange={(e) => setRoomName(e.target.value)}
+    <>
+      <span className="index-title reverse"></span>
+      <div className="container homecontainer">
+        <h1 className="booklist-single my-2">Expand Office Registry </h1>
+        <div className="d-flex justify-content-between homecontainer__sectionone">
+          <div className="d-flex homecontainer__sectionone__img">
+            <img
+              src={AddRoomBirdsEye}
+              alt=""
+              className="homecontainer__sectionone__img__imgattr"
             />
-          </Col>
-        </Form.Group>
+          </div>
+          <div className="homecontainer__sectionone__info">
+            <Form
+              onSubmit={handleSubmit}
+              className="homecontainer__sectionone__info__addform"
+            >
+              <Form.Group>
+                <Form.Label>Room Name:</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={roomName}
+                  required
+                  onChange={(e) => setRoomName(e.target.value)}
+                />
+              </Form.Group>
 
-        <Form.Group as={Row}>
-          <Form.Label column sm="2">
-            Floor:
-          </Form.Label>
-          <Col sm="6">
-            <Form.Control
-              type="number"
-              value={floor}
-              required
-              onChange={(e) => setFloor(e.target.value)}
-            />
-          </Col>
-        </Form.Group>
+              <Form.Group>
+                <Form.Label>Floor:</Form.Label>
 
-        <Form.Group as={Row}>
-          <Form.Label column sm="2">
-            Capacity:
-          </Form.Label>
-          <Col sm="6">
-            <Form.Control
-              type="number"
-              value={capacity}
-              onChange={(e) => setCapacity(e.target.value)}
-              required
-            />
-          </Col>
-        </Form.Group>
+                <Form.Control
+                  type="number"
+                  value={floor}
+                  required
+                  onChange={(e) => setFloor(e.target.value)}
+                />
+              </Form.Group>
 
-        <Button variant="primary" type="submit">
-          Submit
-        </Button>
-      </Form>
-      <hr className="dark-line" />
-    </div>
+              <Form.Group>
+                <Form.Label>Capacity:</Form.Label>
+
+                <Form.Control
+                  type="number"
+                  value={capacity}
+                  onChange={(e) => setCapacity(e.target.value)}
+                  required
+                />
+              </Form.Group>
+
+              <button type="submit" className="submitroomfindbrf" type="submit">
+                Add Room
+              </button>
+            </Form>
+          </div>
+        </div>
+      </div>
+    </>
   );
 }
-
 export default NewRoom;

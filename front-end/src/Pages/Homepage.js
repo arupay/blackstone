@@ -29,12 +29,12 @@ function Homepage(props) {
         </div>
       </div>
       <span className="index-title">
-        <h1 className="index-title-text">Find Available Rooms</h1>
+        <h1 className="index-title-text">Find A Meeting room</h1>
       </span>
       <Container>
         <FindAvailableRooms setRooms={setRooms} />
         <hr className="dark-line" />
-
+        <h2 className="booklist-single">Meeting Rooms</h2>
         <ShowRooms rooms={rooms} />
       </Container>
     </>
