@@ -17,14 +17,15 @@ function Bookings(props) {
   }, []);
   return (
     <>
-      {bookings.length &&
-        bookings.map((booking) => {
-          return (
-            <div key={booking.id}>
-              <BookingInfoCardLarge booking={booking} />
-            </div>
-          );
-        })}
+      {bookings && bookings.length
+        ? bookings.map((booking) => {
+            return (
+              <div key={booking.id}>
+                <BookingInfoCardLarge booking={booking} />
+              </div>
+            );
+          })
+        : "No bookings"}
     </>
   );
 }

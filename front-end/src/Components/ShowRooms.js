@@ -7,7 +7,7 @@ function ShowRooms(props) {
   const navigate = useNavigate();
   return (
     <div className="mt-3">
-      {rooms.length
+      {rooms && rooms.length
         ? rooms.map((room) => (
             <div
               key={room.id}
