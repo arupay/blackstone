@@ -1,6 +1,6 @@
 import { TbClockPlay, TbClockStop } from "react-icons/tb";
 import { BsBuilding } from "react-icons/bs";
-import formatDate from "../utilities/formatDate";
+import { formatDate } from "../utilities/formatDate";
 import { useNavigate } from "react-router-dom";
 
 function BookingInfoCardLarge(props) {

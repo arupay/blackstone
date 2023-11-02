@@ -36,7 +36,11 @@ function SingleMeetingRoom(props) {
       <hr className="dark-line" />
       <BookRoomForm />
       <hr className="dark-line" />
-      <BookingInfoCardSmall meetings={meetings} />
+      {meetings.length
+        ? meetings.map((meeting) => (
+            <BookingInfoCardSmall key={meeting.id} meeting={meeting} />
+          ))
+        : "No future bookings found for this meeting room"}
     </Container>
   );
 }

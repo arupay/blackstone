@@ -1,7 +1,7 @@
 import { TbClockPlay, TbClockStop } from "react-icons/tb";
 import { BsBuilding } from "react-icons/bs";
 import { Button } from "react-bootstrap";
-import formatDate from "../utilities/formatDate";
+import { formatDate } from "../utilities/formatDate";
 
 function SingleBookingDetails(props) {
   const { meetingDetails, onDelete } = props;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
@@ -8,16 +8,54 @@ import { useParams } from "react-router-dom";
 const API = process.env.REACT_APP_API_URL;
 
 function BookRoomForm() {
-  const [startDate, setStartDate] = useState(new Date());
-  const [endDate, setEndDate] = useState(new Date());
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
   const [meetingName, setMeetingName] = useState("");
   const [attendees, setAttendees] = useState("");
   const { id } = useParams();
+
   const filterPassedTime = (time) => {
     const currentDate = new Date();
     const selectedDate = new Date(time);
     return currentDate.getTime() < selectedDate.getTime();
   };
+
+  const filterEndTime = (time) => {
+    // Filter out times before the current time
+    if (!filterPassedTime(time)) return false;
+
+    // Get the hours and minutes for the selected start time
+    const startHours = startDate.getHours();
+    const startMinutes = startDate.getMinutes();
+
+    // Get the hours and minutes for the currently checked time
+    const timeHours = time.getHours();
+    const timeMinutes = time.getMinutes();
+
+    // Check if the time is the same as the start time or before it
+    return !(
+      timeHours < startHours ||
+      (timeHours === startHours && timeMinutes <= startMinutes)
+    );
+  };
+  //retrieve date used for find booking page.
+  useEffect(() => {
+    const savedStartDate = localStorage.getItem("startDate");
+    const savedEndDate = localStorage.getItem("endDate");
+    if (savedStartDate) {
+      const parsedStartDate = new Date(savedStartDate);
+      if (!isNaN(parsedStartDate)) {
+        setStartDate(parsedStartDate);
+      }
+    }
+    if (savedEndDate) {
+      const parsedEndDate = new Date(savedEndDate);
+      if (!isNaN(parsedEndDate)) {
+        setEndDate(parsedEndDate);
+      }
+    }
+  }, []);
+
   const submitBookingRequest = (event) => {
     event.preventDefault();
 
@@ -47,6 +85,9 @@ function BookRoomForm() {
       .then((response) => {
         console.log(response);
         alert("Booking successful!");
+        localStorage.removeItem("startDate");
+        localStorage.removeItem("endDate");
+        window.location.reload();
       })
       .catch((error) => {
         alert("Booking failed!");
@@ -98,11 +139,14 @@ function BookRoomForm() {
               selected={endDate}
               onChange={(date) => setEndDate(date)}
               showTimeSelect
-              filterTime={filterPassedTime}
+              filterTime={filterEndTime}
               timeFormat="hh:mm aa"
               timeIntervals={30}
               dateFormat="MM/dd/yyyy h:mm aa"
               className="form-control"
+              disabled={
+                !startDate || startDate.getTime() === new Date().getTime()
+              } //disabed until starttime is chosen
             />
           </Col>
         </Form.Group>

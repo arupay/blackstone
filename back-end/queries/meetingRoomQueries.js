@@ -18,7 +18,6 @@ const getRoomById = async (id) => {
     );
     return chosenRoom;
   } catch (error) {
-    qq;
     console.log(error.message || error);
     return null;
   }
@@ -40,6 +39,35 @@ const getFutureBookingsForRoom = async (roomId) => {
   }
 };
 
+const getFilteredRooms = async (start_date, end_date, capacity, floor) => {
+  try {
+    let params = [start_date, end_date]; // required params
+    let query = `SELECT * FROM meeting_room
+    WHERE id NOT IN (
+      SELECT meeting_room_id
+      FROM booking
+      WHERE (start_date, end_date) OVERLAPS ($1, $2)
+    )`;
+
+    if (capacity) {
+      // if capacity exists, push capacity to query and param body, generate dynamic #
+      query += ` AND capacity>= $${params.length + 1}`;
+      params.push(capacity);
+    }
+
+    if (floor) {
+      //if floor exists, push floor to query and param body, generate dynamic #
+      query += ` AND floor = $${params.length + 1}`;
+      params.push(floor);
+    }
+    const rooms = await db.any(query, params);
+    return rooms;
+  } catch (error) {
+    console.log(error.message || error);
+    return error;
+  }
+};
+
 const createRoom = async (name, capacity, floor) => {
   try {
     const newRoomQuery = `INSERT INTO meeting_room (name, capacity, floor)
@@ -58,4 +86,5 @@ module.exports = {
   createRoom,
   getRoomById,
   getFutureBookingsForRoom,
+  getFilteredRooms,
 };
