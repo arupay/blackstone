@@ -70,10 +70,8 @@ function NewRoom(props) {
                   onChange={(e) => setFloor(e.target.value)}
                 />
               </Form.Group>
-
               <Form.Group>
                 <Form.Label>Capacity:</Form.Label>
-
                 <Form.Control
                   type="number"
                   value={capacity}
@@ -81,8 +79,7 @@ function NewRoom(props) {
                   required
                 />
               </Form.Group>
-
-              <button type="submit" className="submitroomfindbrf" type="submit">
+              <button type="submit" className="submitroomfindbrf">
                 Add Room
               </button>
             </Form>
