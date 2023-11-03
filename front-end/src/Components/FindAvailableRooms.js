@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { convertToUTCString } from "../utilities/formatDate";
 import axios from "axios";
+import { toast } from "react-toastify";
 import "./FindAvailableRooms.scss";
 
 const API = process.env.REACT_APP_API_URL;
@@ -35,7 +36,7 @@ function FindAvailableRooms({ setRooms }) {
   const handleFilterSubmit = async (event) => {
     event.preventDefault();
     if (!startDate || !endDate) {
-      alert("All fields must be filled!");
+      toast.error("You  must choose a start and end time to search");
       return;
     }
 
@@ -50,10 +51,12 @@ function FindAvailableRooms({ setRooms }) {
       const response = await axios.get(`${API}/meeting-rooms/filter`, {
         params: requestBody,
       });
+      toast.success("Searching for available rooms");
       setRooms(response.data.payload);
       localStorage.setItem("startDate", convertToUTCString(startDate));
       localStorage.setItem("endDate", convertToUTCString(endDate));
     } catch (error) {
+      toast.error("Error fetching available rooms:");
       console.error("Error fetching available rooms:", error);
     }
   };
@@ -93,7 +96,7 @@ function FindAvailableRooms({ setRooms }) {
               />
             ) : (
               <div className=" disabled-datepicker-placeholder">
-                <div style={{ alignSelf: "flex-end" }}>
+                <div style={{ alignSelf: "end", justifyContent: "center" }}>
                   Select Start Time To Begin
                 </div>
               </div>

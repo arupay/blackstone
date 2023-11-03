@@ -39,8 +39,11 @@ function BookingInfoCardSmall(props) {
             </span>
           </time>
         </div>
-        <div className="even-info">
-          <a onClick={() => navigate(`/bookings/${meeting.id}`)}>view</a>
+        <div
+          onClick={() => navigate(`/bookings/${meeting.id}`)}
+          className="even-info"
+        >
+          View
         </div>
       </section>
     </article>

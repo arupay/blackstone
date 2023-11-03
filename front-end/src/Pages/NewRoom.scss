@@ -1,14 +1,14 @@
 .homecontainer {
-	padding-left: 5.0em;
-	padding-right: 5.0em;
+
     @media (max-width: 991px) {
         height: auto;
         padding-left: 6vw;
         padding-right: 6vw;
     }
     &__sectionone{
-        
+        max-width: 900px;
         align-items: stretch;
+        margin: auto;
         padding-top: 3.0em;
         padding-bottom: 2em;
         @media (max-width: 991px) {

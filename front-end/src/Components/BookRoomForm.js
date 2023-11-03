@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from "react";
-import { Form, Button, Row, Col } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import "./BookRoomForm.scss";
+import { toast } from "react-toastify";
 import { BsPeople, BsBuilding } from "react-icons/bs";
-
+import "./BookRoomForm.scss";
 const API = process.env.REACT_APP_API_URL;
 
 function BookRoomForm(props) {
@@ -58,8 +58,8 @@ function BookRoomForm(props) {
   const submitBookingRequest = (event) => {
     event.preventDefault();
 
-    if (!meetingName || !attendees || !startDate || !endDate) {
-      alert("All fields must be filled!");
+    if (!meetingName || !startDate || !endDate) {
+      toast.error("Booking a meeting room requires all fields");
       return;
     }
 
@@ -67,7 +67,7 @@ function BookRoomForm(props) {
     const endUTC = endDate.toISOString();
 
     if (startDate >= endDate) {
-      alert("Start date must be before end date!");
+      toast.error("End date cannot be before start date.");
       return;
     }
 
@@ -82,14 +82,15 @@ function BookRoomForm(props) {
     axios
       .post(`${API}/bookings`, bookingData)
       .then((response) => {
-        console.log(response);
-        alert("Booking successful!");
+        toast.success("Booking successful");
+        props.fetchBookings();
+        setStartDate(null);
+        setEndDate(null);
         localStorage.removeItem("startDate");
         localStorage.removeItem("endDate");
-        window.location.reload();
       })
       .catch((error) => {
-        alert("Booking failed!");
+        toast.error("Booking failed");
         console.error("Error submitting the booking:", error);
       });
   };
@@ -100,6 +101,7 @@ function BookRoomForm(props) {
     setAttendees("");
     localStorage.removeItem("startDate");
     localStorage.removeItem("endDate");
+    toast.info("All fields cleared");
   };
 
   return (

@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import { Form, Button } from "react-bootstrap";
+import { Form } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import AddRoomBirdsEye from "../assets/AddRoomBirdsEye.png";
 import "./NewRoom.scss";
+import { toast } from "react-toastify";
 const API = process.env.REACT_APP_API_URL;
 
 function NewRoom(props) {
@@ -24,7 +25,10 @@ function NewRoom(props) {
         setRoomName("");
         setFloor("");
         setCapacity("");
-        navigate(`/`);
+        toast.success("Added meeting room successfully!");
+        setTimeout(() => {
+          navigate("/");
+        }, 2000);
       })
       .catch((error) => {
         console.log(error);
@@ -37,7 +41,8 @@ function NewRoom(props) {
       <span className="index-title reverse"></span>
       <div className="container homecontainer">
         <h2 className="booklist-single my-2">Add New Meeting Room </h2>
-        <div className="d-flex justify-content-between homecontainer__sectionone">
+
+        <div className="d-flex d-flex justify-content-evenly homecontainer__sectionone">
           <div className="d-flex homecontainer__sectionone__img">
             <img
               src={AddRoomBirdsEye}
