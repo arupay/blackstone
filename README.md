@@ -6,7 +6,7 @@ Coding challenge where you build a Meeting Room Booking App client that interact
 
 ## Important Links
 
-- [Deployed Api Server](https://blackstone-backend.adaptable.app/api)
+- [Deployed Api Server](https://blackstone-backend.adaptable.app/)
 - [Deployed FrontEnd](https://room-link.netlify.app/)
 - [AWS RDS] Coming Soon...
 
