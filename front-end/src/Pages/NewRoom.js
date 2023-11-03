@@ -36,7 +36,7 @@ function NewRoom(props) {
     <>
       <span className="index-title reverse"></span>
       <div className="container homecontainer">
-        <h1 className="booklist-single my-2">Expand Office Registry </h1>
+        <h2 className="booklist-single my-2">Add New Meeting Room </h2>
         <div className="d-flex justify-content-between homecontainer__sectionone">
           <div className="d-flex homecontainer__sectionone__img">
             <img

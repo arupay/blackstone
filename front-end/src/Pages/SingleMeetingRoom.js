@@ -39,7 +39,7 @@ function SingleMeetingRoom(props) {
       <Container className="mt-4">
         <BookRoomForm roomInfo={roomInfo} />
         <hr className="dark-line" />
-        <h2 className="booklist-single">Bookings</h2>
+        <h2 className="booklist-single">Upcoming Meetings</h2>
 
         {meetings.length
           ? meetings.map((meeting) => (

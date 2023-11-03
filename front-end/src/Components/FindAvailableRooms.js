@@ -92,8 +92,10 @@ function FindAvailableRooms({ setRooms }) {
                 inline
               />
             ) : (
-              <div className="disabled-datepicker-placeholder">
-                {/* <div className="spinner-text"> Select a start date & time</div> */}
+              <div className=" disabled-datepicker-placeholder">
+                <div style={{ alignSelf: "flex-end" }}>
+                  Select Start Time To Begin
+                </div>
               </div>
             )}
           </Form.Group>

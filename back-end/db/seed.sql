@@ -18,4 +18,9 @@ INSERT INTO booking (start_date, end_date, attendees, meeting_name, meeting_room
 ('2023-11-07 14:00:00 UTC', '2023-11-07 15:30:00 UTC', 'helen.carter@example.com;ian.frank@example.com', 'New Product Launch', 3),
 ('2023-11-08 09:15:00 UTC', '2023-11-08 10:45:00 UTC', 'jane.gray@example.com', 'Client Presentation', 1),
 ('2023-11-09 12:45:00 UTC', '2023-11-09 14:15:00 UTC', 'kevin.hill@example.com;lucy.miller@example.com;nancy.owen@example.com', 'Q&A Session', 5),
-('2023-11-10 16:00:00 UTC', '2023-11-10 17:00:00 UTC', 'paul.parker@example.com', 'Software Demo', 4);
+('2023-11-10 16:00:00 UTC', '2023-11-10 17:00:00 UTC', 'paul.parker@example.com', 'Software Demo', 4),
+('2023-10-28 09:00:00 UTC', '2023-10-28 10:30:00 UTC', 'olivia.jackson@example.com', 'Weekly Review', 1),
+('2023-10-29 11:00:00 UTC', '2023-10-29 12:00:00 UTC', 'liam.johnson@example.com', 'Product Planning', 2),
+('2023-10-30 13:00:00 UTC', '2023-10-30 14:30:00 UTC', 'emma.wilson@example.com', 'Marketing Strategy', 3),
+('2023-10-31 15:00:00 UTC', '2023-10-31 16:00:00 UTC', 'noah.miller@example.com', 'Financial Review', 4),
+('2023-11-01 10:00:00 UTC', '2023-11-01 11:30:00 UTC', 'ava.smith@example.com', 'IT Infrastructure Update', 5);
