@@ -1,13 +1,53 @@
 import { TbClockPlay, TbClockStop } from "react-icons/tb";
 import { BsBuilding } from "react-icons/bs";
 import { formatDate } from "../utilities/formatDate";
+import { getMonthAbbreviation } from "../utilities/formatDate";
+import { getDayOfWeekAbbreviation } from "../utilities/formatDate";
+import { getDayOfMonth } from "../utilities/formatDate";
 import { useNavigate } from "react-router-dom";
 
 function BookingInfoCardLarge(props) {
   const navigate = useNavigate();
   const { booking } = props;
+  const dayOfMonth = getDayOfMonth(booking.start_date);
+  const monthAbbreviation = getMonthAbbreviation(booking.start_date);
+  const weekdayAbrev = getDayOfWeekAbbreviation(booking.start_date);
+  console.log(booking);
   return (
-    <div className="mt-3">
+    <article className="bkcard fl-left" style={{ maxWidth: "800px" }}>
+      <section className="bkdate">
+        <time>
+          <span className="bkdate-weekday">{weekdayAbrev}</span>
+          <span className="bkdate-day">{dayOfMonth}</span>
+          <span className="bkdate-month">{monthAbbreviation}</span>
+        </time>
+      </section>
+      <section className="bkcard-cont">
+        <h3>{booking.meeting_name}</h3>
+        <div className="text-none small text-muted">{booking.name}</div>
+        <div className="text-none small text-muted">
+          <BsBuilding />
+          {booking.floor}
+        </div>
+
+        <div className="even-date">
+          <div style={{ textTransform: "none", fontSize: "13px" }}>
+            <TbClockPlay size="1.1em" style={{ marginRight: "10px" }} />
+            Start: {formatDate(booking.start_date)}
+          </div>
+          <div style={{ textTransform: "none", fontSize: "13px" }}>
+            <TbClockStop size="1.1em" style={{ marginRight: "10px" }} />
+            End: {formatDate(booking.end_date)}
+          </div>
+        </div>
+      </section>
+    </article>
+  );
+}
+
+export default BookingInfoCardLarge;
+
+/** <div className="mt-3">
       <div
         className="card mb-2 room-card"
         onClick={() => navigate(`/bookings/${booking.id}`)}
@@ -33,8 +73,4 @@ function BookingInfoCardLarge(props) {
           </div>
         </div>
       </div>
-    </div>
-  );
-}
-
-export default BookingInfoCardLarge;
+    </div> */

@@ -1,3 +1,4 @@
+//AWS RDS  CONFIGURATION (TO DO OVER WEEKEND WITH DEPLOYMENT ON EC2/LAMBDA)
 // const pgp = require("pg-promise")();
 // require("dotenv").config();
 // const fs = require('fs');

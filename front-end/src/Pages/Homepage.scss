@@ -4,20 +4,9 @@
     // background-image:url("../assets/aboutbglarge.jpg");
     height: 40vh;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: stretch;
     background-attachment: fixed;
     
-    &__mask{
-        background-color: rgba(0,0,0,0.5); 
-        margin-top: 100px;
-        width: 500px;
-        align-self: center;
-        font-size: 18px;
-        @media (max-width: 500px) {
-            font-size: 12px;
-            width: 300px;
-        }
-    }
     &__abouttext{
         font-style: oblique;
         letter-spacing: 1px;

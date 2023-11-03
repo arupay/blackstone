@@ -1,0 +1,129 @@
+a.fl-left {
+    float: left
+}
+.booklist-single {
+    text-transform: uppercase;
+    font-weight: 900;
+    border-left: 10px solid #EB9D07;
+    padding-left: 10px;
+    margin-bottom: 30px
+}
+
+
+.bkcard{
+    display: table-row;
+    width: 100% !important;
+    background-color: #f4eeee;
+    color: #989898;
+    margin-bottom: 50px;
+    font-family: 'Oswald', sans-serif;
+    text-transform: uppercase;
+    border-radius: 10px;
+    position: relative;
+    transition: transform 0.5s ease; /* Adjust the time as needed */
+
+}
+
+.bkcard:hover{
+    transform: scale(1.02);
+    
+}
+
+
+.bkdate{
+    display: table-cell;
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+
+    width: 35%;
+    background-color: #f7e0c8;
+    position: relative;
+    text-align: center;
+    border-right: 3px dashed #fff    
+}
+
+
+.bkdate time {
+    display: block;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -webkit-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%)
+}
+
+.bkdate time span {
+    display: block
+}
+
+.bkdate-day {
+    color: #2b2b2b;
+    font-weight: 600;
+    font-size: 300%
+}
+
+.bkdate-month {
+    text-transform: uppercase;
+    font-weight: 900;
+    margin-top: -10px
+}
+
+.bkdate-weekday {
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: -10px;
+    color: #190731;
+}
+
+.bkdate-start {
+    text-transform: uppercase;
+    font-size: 12px;
+    font-weight: 400;
+    margin-top: 10px
+}
+.bkcard-cont {
+    display: table-cell;
+    width: 65%;
+    font-size: 100%;
+    padding: 10px 10px 30px 50px
+}
+
+.bkcard-cont h3 {
+    color: #3C3C3C;
+    font-size: 130%;
+    font-weight: 900;
+}
+
+
+.bkcard-cont>div {
+    display: table-row
+}
+
+.bkcard-cont .even-date i,
+.bkcard-cont .even-date time{
+    display: table-cell
+}
+
+.bkcard-cont .even-date i,
+.bkcard-cont .even-info i {
+    padding: 5% 5% 0 0
+}
+
+
+
+.even-info{
+    border-radius: 20px;
+    width: 80px;
+    height: 30px;
+    background-color: #eb9d07;
+    color: #190731;
+    letter-spacing: 1px;
+    font-weight: 900 !important;
+    text-align: center;
+    line-height: 30px;
+    position: absolute;
+    right: 15px;
+    bottom: 15px
+}
+
