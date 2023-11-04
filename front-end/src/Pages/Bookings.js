@@ -46,9 +46,7 @@ function Bookings(props) {
 
   return (
     <>
-      <span className="index-title reverse">
-        <h1 className="index-title-text reverse"></h1>
-      </span>{" "}
+      <span className="index-title reverse"></span>{" "}
       <Container>
         <Tabs defaultActiveKey="future" id="bookings-tab" className="mb-3">
           <Tab eventKey="future" title="Upcoming Meetings">

@@ -1,16 +1,39 @@
 const db = require("../db/dbConfig.js");
 
+//reusable funciton that checks for conflicting bookings
+const hasConflictingBooking = async (
+  meeting_room_id,
+  start_date,
+  end_date,
+  excludeBookingId = null
+) => {
+  const query = excludeBookingId
+    ? "SELECT * FROM booking WHERE meeting_room_id = $1 AND ((start_date, end_date) OVERLAPS ($2, $3)) AND id != $4"
+    : "SELECT * FROM booking WHERE meeting_room_id = $1 AND ((start_date, end_date) OVERLAPS ($2, $3))";
+
+  const queryParams = excludeBookingId
+    ? [meeting_room_id, start_date, end_date, excludeBookingId]
+    : [meeting_room_id, start_date, end_date];
+
+  const conflictingBooking = await db.oneOrNone(query, queryParams);
+  return conflictingBooking != null;
+};
+
 const getBookings = async () => {
   try {
     const query = `
-      SELECT booking.*, meeting_room.floor, meeting_room.name
+      SELECT booking.*, meeting_room.floor, meeting_room.capacity, meeting_room.name as room_name
       FROM booking
       JOIN meeting_room ON booking.meeting_room_id = meeting_room.id;
     `;
 
-    const bookingsWithFloor = await db.any(query);
+    const bookingInfo = await db.any(query);
 
-    return bookingsWithFloor;
+    const transformedBookings = bookingInfo.map((booking) => ({
+      ...booking,
+      attendees: booking.attendees.split(";"), // split email stirng on ;
+    }));
+    return transformedBookings;
   } catch (error) {
     console.log(error.message || error);
     return error;
@@ -27,15 +50,25 @@ const getBookingById = async (id) => {
         booking.attendees,
         booking.meeting_name,
         booking.meeting_room_id,
+        meeting_room.name as room_name,
+        meeting_room.capacity,
         meeting_room.floor 
       FROM booking
       JOIN meeting_room ON booking.meeting_room_id = meeting_room.id
       WHERE booking.id = $1;
     `;
 
-    const bookingWithFloor = await db.oneOrNone(query, [id]);
+    // Fetch the booking from the database
+    const bookingInfo = await db.oneOrNone(query, [id]);
 
-    return bookingWithFloor;
+    if (bookingInfo) {
+      return {
+        ...bookingInfo,
+        attendees: bookingInfo.attendees.split(";"),
+      };
+    }
+
+    return bookingInfo;
   } catch (error) {
     console.log(error.message || error);
     return error;
@@ -45,13 +78,17 @@ const getBookingById = async (id) => {
 const createBooking = async (bookingData) => {
   const { start_date, end_date, attendees, meeting_room_id, meeting_name } =
     bookingData;
-  try {
-    const conflictingBooking = await db.oneOrNone(
-      "SELECT * FROM booking WHERE meeting_room_id = $1 AND ((start_date, end_date) OVERLAPS ($2, $3))",
-      [meeting_room_id, start_date, end_date]
-    );
+  if (!meeting_name || !start_date || !end_date) {
+    return { error: true, message: "Missing required booking information." };
+  }
 
-    if (conflictingBooking) {
+  try {
+    const isConflict = await hasConflictingBooking(
+      meeting_room_id,
+      start_date,
+      end_date
+    );
+    if (isConflict) {
       return {
         error: true,
         message: "The room is already booked for the desired time slot.",
@@ -69,17 +106,53 @@ const createBooking = async (bookingData) => {
   }
 };
 
+const updateBooking = async (bookingId, bookingData) => {
+  const { start_date, end_date, attendees, meeting_name, meeting_room_id } =
+    bookingData;
+  if (!meeting_name || !start_date || !end_date) {
+    throw new Error("Missing required booking information.");
+  }
+
+  const isConflict = await hasConflictingBooking(
+    meeting_room_id,
+    start_date,
+    end_date,
+    bookingId
+  );
+  if (isConflict) {
+    throw new Error("The room is already booked for the desired time slot.");
+  }
+
+  const query = `
+    UPDATE booking 
+    SET start_date = $1, end_date = $2, attendees = $3, meeting_name = $4, meeting_room_id = $5 
+    WHERE id = $6
+    RETURNING *; 
+  `;
+  return db.oneOrNone(query, [
+    start_date,
+    end_date,
+    attendees,
+    meeting_name,
+    meeting_room_id,
+    bookingId,
+  ]);
+};
+
 const deleteBooking = async (id) => {
   try {
-    const deletedBooking = await db.result(
-      "DELETE FROM booking WHERE id = $1",
-      [id]
-    );
-    return deletedBooking.rowCount; // Returns the number of rows affected by the last executed statement!
+    await db.none("DELETE FROM booking WHERE id = $1", [id]);
+    return true;
   } catch (error) {
     console.log(error.message || error);
-    return error;
+    throw new Error("Failed to delete booking");
   }
 };
 
-module.exports = { getBookings, getBookingById, createBooking, deleteBooking };
+module.exports = {
+  getBookings,
+  getBookingById,
+  createBooking,
+  deleteBooking,
+  updateBooking,
+};

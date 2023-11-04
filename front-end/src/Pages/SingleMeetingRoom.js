@@ -34,6 +34,7 @@ function SingleMeetingRoom(props) {
         console.log(err);
       });
   }, [id, fetchBookings]);
+
   return (
     <div>
       <span className="index-title reverse">

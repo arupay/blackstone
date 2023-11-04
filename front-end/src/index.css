@@ -67,4 +67,10 @@ body {
   text-align: center;
 }
 
+.form-control::-webkit-inner-spin-button,
+.form-control::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
 

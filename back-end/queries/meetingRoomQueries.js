@@ -49,14 +49,12 @@ const getFilteredRooms = async (start_date, end_date, capacity, floor) => {
       WHERE (start_date, end_date) OVERLAPS ($1, $2)
     )`;
 
-    if (capacity) {
-      // if capacity exists, push capacity to query and param body, generate dynamic #
+    if (capacity) { //add capacity to query string
       query += ` AND capacity>= $${params.length + 1}`;
       params.push(capacity);
     }
 
-    if (floor) {
-      //if floor exists, push floor to query and param body, generate dynamic #
+    if (floor) { //add floro to query string/ dynamic paramaetizaiton
       query += ` AND floor = $${params.length + 1}`;
       params.push(floor);
     }

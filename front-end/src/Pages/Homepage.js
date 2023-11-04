@@ -9,11 +9,15 @@ const API = process.env.REACT_APP_API_URL;
 
 function Homepage(props) {
   const [rooms, setRooms] = useState([]);
+  const [allFloors, setAllFloors] = useState([]);
+
   useEffect(() => {
     axios
       .get(`${API}/meeting-rooms`)
       .then((res) => {
         setRooms(res.data.payload);
+        const floors = res.data.payload.map((room) => room.floor);
+        setAllFloors([...new Set(floors)].sort((a, b) => a - b));
       })
       .catch((err) => {
         console.log(err);
@@ -32,7 +36,11 @@ function Homepage(props) {
         <h1 className="index-title-text">Find A Meeting room</h1>
       </span>
       <Container>
-        <FindAvailableRooms setRooms={setRooms} />
+        <FindAvailableRooms
+          rooms={rooms}
+          setRooms={setRooms}
+          allFloors={allFloors}
+        />
         <hr className="dark-line" />
         <h2 className="booklist-single">Meeting Rooms</h2>
         <ShowRooms rooms={rooms} />

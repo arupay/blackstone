@@ -8,11 +8,11 @@ import { toast } from "react-toastify";
 import "./FindAvailableRooms.scss";
 
 const API = process.env.REACT_APP_API_URL;
-function FindAvailableRooms({ setRooms }) {
+function FindAvailableRooms({ setRooms, rooms, allFloors }) {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [floor, setFloor] = useState("");
-  const [capacity, setCapacity] = useState("");
+  const [capacity, setCapacity] = useState(1);
 
   const filterPassedTime = (time) => {
     const currentDate = new Date();
@@ -39,7 +39,6 @@ function FindAvailableRooms({ setRooms }) {
       toast.error("You  must choose a start and end time to search");
       return;
     }
-
     try {
       const requestBody = {
         start_date: convertToUTCString(startDate),
@@ -51,14 +50,28 @@ function FindAvailableRooms({ setRooms }) {
       const response = await axios.get(`${API}/meeting-rooms/filter`, {
         params: requestBody,
       });
-      toast.success("Searching for available rooms");
+      const availableRoomsCount = response.data.payload.length;
+      toast.success(
+        `${availableRoomsCount} room(s) found to match your criteria!`
+      );
       setRooms(response.data.payload);
+
       localStorage.setItem("startDate", convertToUTCString(startDate));
       localStorage.setItem("endDate", convertToUTCString(endDate));
     } catch (error) {
       toast.error("Error fetching available rooms:");
       console.error("Error fetching available rooms:", error);
     }
+  };
+
+  const clearForm = () => {
+    setStartDate(null);
+    setEndDate(null);
+    setCapacity(1);
+    setFloor("Any Floor");
+    localStorage.removeItem("startDate");
+    localStorage.removeItem("endDate");
+    toast.info("All fields cleared");
   };
 
   return (
@@ -106,25 +119,67 @@ function FindAvailableRooms({ setRooms }) {
           <Form.Group className="smallgroup mt-2">
             <Form.Label>Floor:</Form.Label>
             <Form.Control
-              type="number"
+              as="select"
               value={floor}
               onChange={(e) => setFloor(e.target.value)}
-            />
+            >
+              <option value="">Any Floor</option>
+              {allFloors.map((floorNumber) => (
+                <option key={floorNumber} value={floorNumber}>
+                  {floorNumber}
+                </option>
+              ))}
+            </Form.Control>
           </Form.Group>
 
-          <Form.Group className="smallgroup mt-2">
+          <Form.Group
+            className="smallgroup mt-2"
+            style={{ marginRight: "50px" }}
+          >
             <Form.Label>Room Capacity:</Form.Label>
-
-            <Form.Control
-              type="number"
-              value={capacity}
-              onChange={(e) => setCapacity(e.target.value)}
-            />
+            <div className="input-group">
+              <Form.Control
+                type="number"
+                min="0"
+                value={capacity}
+                onChange={(e) =>
+                  setCapacity(Math.max(0, parseInt(e.target.value, 10)))
+                }
+              />
+              <div className="input-group-append">
+                <button
+                  className="btn btn-outline-secondary mx-2"
+                  type="button"
+                  onClick={() =>
+                    setCapacity((prevCapacity) => Math.max(0, prevCapacity - 1))
+                  }
+                >
+                  -
+                </button>
+                <button
+                  className="btn btn-outline-secondary mx-2"
+                  type="button"
+                  onClick={() =>
+                    setCapacity((prevCapacity) => prevCapacity + 1)
+                  }
+                >
+                  +
+                </button>
+              </div>
+            </div>
           </Form.Group>
         </div>
         <div className="d-flex justify-content-center mx-auto">
-          <button type="submit" className="submitroomfind">
+          <button type="submit" className="submitroomfindbrf">
             Find
+          </button>
+          <button
+            type="button"
+            className="submitroomfindbrf"
+            style={{ backgroundColor: "#fff" }}
+            onClick={clearForm}
+          >
+            clear
           </button>
         </div>
       </Form>

@@ -70,7 +70,11 @@ meetingRooms.get("/:id/bookings", async (req, res) => {
   try {
     const bookings = await getFutureBookingsForRoom(id);
     if (bookings && bookings.length > 0) {
-      res.status(200).json({ success: true, payload: bookings });
+      res.status(200).json({
+        success: true,
+        payload: bookings,
+        message: `Found ${bookings.length} rooms matching your criteria!`,
+      });
     } else {
       res.status(404).json({
         success: false,
