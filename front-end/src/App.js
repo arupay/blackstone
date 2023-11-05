@@ -10,7 +10,6 @@ import Homepage from "../src/Pages/Homepage";
 import SingleMeetingRoom from "./Pages/SingleMeetingRoom";
 import NewRoom from "./Pages/NewRoom";
 import Bookings from "./Pages/Bookings";
-import SingleBooking from "./Pages/SingleBooking";
 import ScrollToTop from "./Components/ScrollToTop";
 import Footer from "./Components/Footer";
 
@@ -37,7 +36,6 @@ function App() {
           <Route path="/meetingrooms/:id" element={<SingleMeetingRoom />} />
           <Route path="/meetingrooms/new" element={<NewRoom />} />
           <Route path="/bookings" element={<Bookings />} />
-          <Route path="/bookings/:id" element={<SingleBooking />} />
         </Routes>
         <Footer />
       </Router>
