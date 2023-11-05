@@ -29,14 +29,38 @@ const getBookings = async () => {
 
     const bookingInfo = await db.any(query);
 
-    const transformedBookings = bookingInfo.map((booking) => ({
-      ...booking,
-      attendees: booking.attendees.split(";"), // split email stirng on ;
-    }));
-    return transformedBookings;
+    const now = new Date();
+    const pastBookings = [];
+    const futureBookings = [];
+
+    bookingInfo.forEach((booking) => {
+      const endMoment = new Date(booking.end_date);
+      const bookingWithAttendees = {
+        ...booking,
+        attendees: booking.attendees.split(";"),
+      };
+
+      // checkint for end date already happening/occurring
+      if (endMoment < now) {
+        pastBookings.push(bookingWithAttendees);
+      } else {
+        futureBookings.push(bookingWithAttendees);
+      }
+    });
+
+    // sort past, most recent first (for front end purposes)
+    pastBookings.sort((a, b) => new Date(b.end_date) - new Date(a.end_date));
+
+    // sort future, soonest to occur first ('')
+    futureBookings.sort((a, b) => new Date(a.end_date) - new Date(b.end_date));
+
+    return {
+      past: pastBookings,
+      future: futureBookings,
+    };
   } catch (error) {
     console.log(error.message || error);
-    return error;
+    return { error: true, message: "Database error." };
   }
 };
 
@@ -50,6 +74,7 @@ const getBookingById = async (id) => {
         booking.attendees,
         booking.meeting_name,
         booking.meeting_room_id,
+        booking.created_on,
         meeting_room.name as room_name,
         meeting_room.capacity,
         meeting_room.floor 

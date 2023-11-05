@@ -1,0 +1,22 @@
+
+.custom-tab .nav-item {
+margin-top:10px;
+}
+  
+
+.custom-tab .nav-link {
+    color: black !important;
+    text-transform: uppercase;
+    font-weight: 900;
+    padding-left: 10px;
+    margin-bottom: 30px;
+    font-size: 25px;
+  
+}
+.custom-tab .nav-link.active {
+    border-left: 10px solid #EB9D07 !important;
+
+    background-color: #007bff; 
+    border-color: #007bff; 
+}
+  

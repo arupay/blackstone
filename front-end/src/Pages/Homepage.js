@@ -11,18 +11,24 @@ function Homepage(props) {
   const [rooms, setRooms] = useState([]);
   const [allFloors, setAllFloors] = useState([]);
 
-  useEffect(() => {
+  const fetchRooms = () => {
     axios
       .get(`${API}/meeting-rooms`)
       .then((res) => {
-        setRooms(res.data.payload);
+        setRooms(Array.isArray(res.data.payload) ? res.data.payload : []);
         const floors = res.data.payload.map((room) => room.floor);
         setAllFloors([...new Set(floors)].sort((a, b) => a - b));
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err);
+        setRooms([]); // Ensures rooms is an array even after an error.
       });
+  };
+
+  useEffect(() => {
+    fetchRooms();
   }, []);
+
   return (
     <>
       <div className="aboutimg text-center">
@@ -37,7 +43,7 @@ function Homepage(props) {
       </span>
       <Container>
         <FindAvailableRooms
-          rooms={rooms}
+          fetchRooms={fetchRooms}
           setRooms={setRooms}
           allFloors={allFloors}
         />

@@ -6,9 +6,10 @@ import { convertToUTCString } from "../utilities/formatDate";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./FindAvailableRooms.scss";
+import SpinnerComponent from "./SpinnerComponent";
 
 const API = process.env.REACT_APP_API_URL;
-function FindAvailableRooms({ setRooms, rooms, allFloors }) {
+function FindAvailableRooms({ setRooms, fetchRooms, allFloors }) {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [floor, setFloor] = useState("");
@@ -55,7 +56,10 @@ function FindAvailableRooms({ setRooms, rooms, allFloors }) {
         `${availableRoomsCount} room(s) found to match your criteria!`
       );
       setRooms(response.data.payload);
-
+      window.scrollTo({
+        top: document.documentElement.scrollHeight,
+        behavior: "smooth", // Optional: defines the transition animation
+      });
       localStorage.setItem("startDate", convertToUTCString(startDate));
       localStorage.setItem("endDate", convertToUTCString(endDate));
     } catch (error) {
@@ -68,10 +72,11 @@ function FindAvailableRooms({ setRooms, rooms, allFloors }) {
     setStartDate(null);
     setEndDate(null);
     setCapacity(1);
-    setFloor("Any Floor");
+    setFloor("");
     localStorage.removeItem("startDate");
     localStorage.removeItem("endDate");
-    toast.info("All fields cleared");
+    fetchRooms();
+    toast.info("All fields cleared, rooms restored");
   };
 
   return (
@@ -108,11 +113,7 @@ function FindAvailableRooms({ setRooms, rooms, allFloors }) {
                 inline
               />
             ) : (
-              <div className=" disabled-datepicker-placeholder">
-                <div style={{ alignSelf: "end", justifyContent: "center" }}>
-                  Select Start Time To Begin
-                </div>
-              </div>
+              <SpinnerComponent />
             )}
           </Form.Group>
 

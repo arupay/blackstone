@@ -96,18 +96,20 @@ bookings.put("/:id", async (req, res) => {
 });
 
 bookings.delete("/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-      const success = await deleteBooking(id);
-      if (success) {
-        res.status(200).json({ success: true, message: "Booking deleted successfully" });
-      } else {
-        res.status(404).json({ success: false, message: "Booking not found" });
-      }
-    } catch (error) {
-      console.error(error.message || error);
-      res.status(500).json({ success: false, message: "Internal Server Error" });
+  const { id } = req.params;
+  try {
+    const success = await deleteBooking(id);
+    if (success) {
+      res
+        .status(200)
+        .json({ success: true, message: "Booking deleted successfully" });
+    } else {
+      res.status(404).json({ success: false, message: "Booking not found" });
     }
-  });
+  } catch (error) {
+    console.error(error.message || error);
+    res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
 
 module.exports = bookings;

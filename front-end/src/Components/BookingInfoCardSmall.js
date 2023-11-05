@@ -7,10 +7,10 @@ import "./BookingInfoCardSmall.scss";
 import { useState } from "react";
 import Modal from "react-modal";
 import BookingInfoCardLarge from "./BookingInfoCardLarge";
+import { WiStars } from "react-icons/wi";
 
 function BookingInfoCardSmall(props) {
-  const { meeting } = props;
-
+  const { meeting, isMostRecent } = props;
   const [isMeetingModalOpen, setIsMeetingModalOpen] = useState(false);
   const dayOfMonth = getDayOfMonth(meeting.start_date);
   const monthAbbreviation = getMonthAbbreviation(meeting.start_date);
@@ -54,6 +54,13 @@ function BookingInfoCardSmall(props) {
 
   return (
     <article className="bkcard fl-left">
+      {isMostRecent && (
+        <div className="recent-ribbon ">
+          <div className="recent-ribbon__text">New</div>
+          <WiStars size="2.5em" />
+        </div>
+      )}
+
       <section className="bkdate">
         <time>
           <span className="bkdate-weekday">{weekdayAbrev}</span>

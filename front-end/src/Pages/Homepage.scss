@@ -1,15 +1,10 @@
 .aboutimg {
     background-image: url("../assets/banner.avif");
-    height: 40vh;
+    height: 60vh;
     background-repeat: no-repeat;
-    background-size: cover;
+    background-size: 100%;
     background-attachment: fixed;
-    
-    &__abouttext{
-        font-style: oblique;
-        letter-spacing: 1px;
-        font-weight: 500;
-    }
-    
-    
+    background-position:50% 50%;
+    image-rendering: crisp-edges;
+
 }

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Container, Tab, Tabs } from "react-bootstrap";
 import BookingInfoCardLarge from "../Components/BookingInfoCardLarge";
+import "./Bookings.scss";
 
 const API = process.env.REACT_APP_API_URL;
 
@@ -13,31 +14,8 @@ function Bookings(props) {
     axios
       .get(`${API}/bookings/`)
       .then((res) => {
-        const now = new Date();
-        const { past, future } = res.data.payload.reduce(
-          (acc, booking) => {
-            const endDate = new Date(booking.end_date);
-            if (endDate < now) {
-              acc.past.push(booking);
-            } else {
-              acc.future.push(booking);
-            }
-            return acc;
-          },
-          { past: [], future: [] }
-        );
-
-        // Sort past bookings from the most recent to the oldest
-        const sortedPastBookings = past.sort(
-          (a, b) => new Date(b.end_date) - new Date(a.end_date)
-        );
-        // Sort future bookings from the soonest to the latest
-        const sortedFutureBookings = future.sort(
-          (a, b) => new Date(a.start_date) - new Date(b.start_date)
-        );
-
-        setPastBookings(sortedPastBookings);
-        setFutureBookings(sortedFutureBookings);
+        setPastBookings(res.data.payload.past);
+        setFutureBookings(res.data.payload.future);
       })
       .catch((err) => {
         console.log(err);
@@ -48,32 +26,32 @@ function Bookings(props) {
     <>
       <span className="index-title reverse"></span>{" "}
       <Container>
-        <Tabs defaultActiveKey="future" id="bookings-tab" className="mb-3">
+        <Tabs
+          defaultActiveKey="future"
+          id="bookings-tab"
+          className="mb-3 custom-tab"
+        >
           <Tab eventKey="future" title="Upcoming Meetings">
-            <div className="d-flex flex-column align-items-center">
+            <Container className="d-flex flex-column justify-content-center align-items-center">
               {futureBookings.length > 0 ? (
                 futureBookings.map((booking) => (
-                  <div key={booking.id} className="w-100">
-                    <BookingInfoCardLarge booking={booking} />
-                  </div>
+                  <BookingInfoCardLarge key={booking.id} booking={booking} />
                 ))
               ) : (
                 <p>No future bookings</p>
               )}
-            </div>
+            </Container>
           </Tab>
           <Tab eventKey="past" title="Past Meetings">
-            <div className="d-flex flex-column align-items-center">
+            <Container className="d-flex flex-column justify-content-center align-items-center">
               {pastBookings.length > 0 ? (
                 pastBookings.map((booking) => (
-                  <div key={booking.id} className="w-100">
-                    <BookingInfoCardLarge booking={booking} />
-                  </div>
+                  <BookingInfoCardLarge booking={booking} key={booking.id} />
                 ))
               ) : (
                 <p>No past bookings</p>
               )}
-            </div>
+            </Container>
           </Tab>
         </Tabs>
       </Container>

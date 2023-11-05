@@ -21,8 +21,8 @@ function NavBar(props) {
           <a href="/">
             <img
               style={{
-                width: "160px",
-                height: "160px",
+                width: "120px",
+                height: "120px",
               }}
               src={roomlinklogotransparent}
               alt="room link logo"

@@ -7,13 +7,15 @@ import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { BsPeople, BsBuilding } from "react-icons/bs";
 import "./BookRoomForm.scss";
+import SpinnerComponent from "./SpinnerComponent";
 const API = process.env.REACT_APP_API_URL;
 
 function BookRoomForm(props) {
   const [startDate, setStartDate] = useState();
   const [endDate, setEndDate] = useState();
   const [meetingName, setMeetingName] = useState("");
-  const [attendees, setAttendees] = useState("");
+  const [attendeeInput, setAttendeeInput] = useState("");
+  const [attendeesList, setAttendeesList] = useState([]);
   const { id } = useParams();
   const { name, floor, capacity } = props.roomInfo;
   const filterPassedTime = (time) => {
@@ -55,6 +57,24 @@ function BookRoomForm(props) {
     }
   }, []);
 
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  const addAttendee = () => {
+    if (emailRegex.test(attendeeInput)) {
+      if (!attendeesList.includes(attendeeInput)) {
+        setAttendeesList([...attendeesList, attendeeInput]);
+        setAttendeeInput("");
+      } else {
+        toast.error("Attendee already added.");
+      }
+    } else {
+      toast.error("Please enter a valid email address.");
+    }
+  };
+  const removeAttendee = (email) => {
+    setAttendeesList(attendeesList.filter((attendee) => attendee !== email));
+  };
+
   const submitBookingRequest = (event) => {
     event.preventDefault();
 
@@ -70,12 +90,13 @@ function BookRoomForm(props) {
       toast.error("End date cannot be before start date.");
       return;
     }
+    const attendeesString = attendeesList.join(";");
 
     const bookingData = {
       meeting_name: meetingName,
       start_date: startUTC,
       end_date: endUTC,
-      attendees,
+      attendees: attendeesString,
       meeting_room_id: id,
     };
 
@@ -88,9 +109,22 @@ function BookRoomForm(props) {
         setEndDate(null);
         localStorage.removeItem("startDate");
         localStorage.removeItem("endDate");
+        window.scrollTo({
+          top: document.documentElement.scrollHeight,
+          behavior: "smooth", // Optional: defines the transition animation
+        });
       })
       .catch((error) => {
-        toast.error("Booking failed");
+        if (
+          error.response &&
+          error.response.data &&
+          error.response.data.message
+        ) {
+          toast.error(error.response.data.message);
+        } else {
+          // If the error doesn't have a response with a message, default to a general error message
+          toast.error("Booking failed with an unexpected error");
+        }
         console.error("Error submitting the booking:", error);
       });
   };
@@ -98,7 +132,8 @@ function BookRoomForm(props) {
     setStartDate(null);
     setEndDate(null);
     setMeetingName("");
-    setAttendees("");
+    setAttendeeInput("");
+    setAttendeesList([]);
     localStorage.removeItem("startDate");
     localStorage.removeItem("endDate");
     toast.info("All fields cleared");
@@ -121,22 +156,6 @@ function BookRoomForm(props) {
           </div>
         </div>
         <div className="largegroupbrf" style={{ paddingTop: "125px" }}>
-          <Form.Group className=" smallgroupbrf">
-            <Form.Label>Meeting Name:</Form.Label>
-            <Form.Control
-              type="text"
-              value={meetingName}
-              onChange={(e) => setMeetingName(e.target.value)}
-            />
-          </Form.Group>
-          <Form.Group className=" smallgroupbrf">
-            <Form.Label>Attendee List:</Form.Label>
-            <Form.Control
-              type="text"
-              value={attendees}
-              onChange={(e) => setAttendees(e.target.value)}
-            />
-          </Form.Group>
           <Form.Group className=" smallgroupbrf">
             <Form.Label>Start Date & Time:</Form.Label>
 
@@ -167,18 +186,63 @@ function BookRoomForm(props) {
                 inline
               />
             ) : (
-              <div className=" disabled-datepicker-placeholder">
-                <div style={{ alignSelf: "flex-end" }}>
-                  Select Start Time To Begin
-                </div>
-              </div>
+              <SpinnerComponent />
             )}
           </Form.Group>
+          <div className=" smallgroupbrf mt-2">
+            <Form.Group>
+              <Form.Label>Meeting Name:</Form.Label>
+
+              <Form.Control
+                type="text"
+                value={meetingName}
+                onChange={(e) => setMeetingName(e.target.value)}
+              />
+            </Form.Group>
+            <Form.Group>
+              <Form.Label>Attendee List (email):</Form.Label>
+              <div className="input-group " style={{ maxWidth: "330px" }}>
+                <Form.Control
+                  type="text"
+                  placeholder="Enter attendee email"
+                  value={attendeeInput}
+                  onChange={(e) => setAttendeeInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && addAttendee()}
+                />
+                <div className="input-group-append">
+                  <button
+                    className="btn btn-outline-secondary"
+                    style={{ marginLeft: "25px", borderRadius: "100%" }}
+                    type="button"
+                    onClick={addAttendee}
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            </Form.Group>
+            <div className="d-flex flex-column">
+              {attendeesList.map((email, index) => (
+                <span
+                  key={index}
+                  className="d-inline-block my-1 text-muted small mr-3 bounce-enter"
+                >
+                  <span type="button" onClick={() => removeAttendee(email)}>
+                    🗑️
+                  </span>{" "}
+                  {email}
+                </span>
+              ))}
+            </div>
+          </div>
         </div>
         <div
-          className="d-flex justify-content-end mx-auto"
-          style={{ paddingRight: "50px" }}
+          className="d-flex justify-content-center mx-auto"
+          style={{ paddingLeft: "50px" }}
         >
+          <button type="submit" className="submitroomfindbrf">
+            Book
+          </button>
           <button
             type="button"
             className="submitroomfindbrf"
@@ -186,9 +250,6 @@ function BookRoomForm(props) {
             onClick={clearForm}
           >
             clear
-          </button>
-          <button type="submit" className="submitroomfindbrf">
-            Book
           </button>
         </div>
       </Form>

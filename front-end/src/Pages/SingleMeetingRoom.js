@@ -1,6 +1,6 @@
 import BookRoomForm from "../Components/BookRoomForm";
 import { Container } from "react-bootstrap";
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import BookingInfoCardSmall from "../Components/BookingInfoCardSmall";
@@ -35,6 +35,16 @@ function SingleMeetingRoom(props) {
       });
   }, [id, fetchBookings]);
 
+  const mostRecentBookingId = useMemo(() => {
+    return meetings.reduce((mostRecentId, currentMeeting) => {
+      return !mostRecentId ||
+        new Date(currentMeeting.created_on) >
+          new Date(meetings.find((m) => m.id === mostRecentId).created_on)
+        ? currentMeeting.id
+        : mostRecentId;
+    }, null);
+  }, [meetings]);
+
   return (
     <div>
       <span className="index-title reverse">
@@ -47,7 +57,11 @@ function SingleMeetingRoom(props) {
         <h2 className="booklist-single">Upcoming Meetings</h2>
         {meetings.length
           ? meetings.map((meeting) => (
-              <BookingInfoCardSmall key={meeting.id} meeting={meeting} />
+              <BookingInfoCardSmall
+                key={meeting.id}
+                meeting={meeting}
+                isMostRecent={meeting.id === mostRecentBookingId} //true or false are you the most recent
+              />
             ))
           : "No future bookings found for this meeting room"}
       </Container>

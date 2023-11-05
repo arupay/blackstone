@@ -1,16 +1,11 @@
 .formcontainerbrf{
     margin: 0;
-    height: 100%;
-    padding: 1em;
     display:flex;
     justify-content: center;
-    
-    @media screen and (min-width: 768px) {
-        padding: 1em;
-    } 
     &__newformbrf{
         border-radius: 20px;
-        width:70%;
+        width:90%;
+        padding: 10px 20px;
         background-color: rgb(244, 238, 238);
         position: relative;
         @media screen and (min-width: 768px) {
@@ -90,7 +85,26 @@
     flex-wrap: wrap;
     justify-content: space-around;
 	}
-	// .smallgroupbrf {
-	// 	width: 45%;
-	// }
+	.smallgroupbrf {
+	width: 33%;
+    }
 }
+
+@keyframes bounceIn {
+    0% {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+    50% {
+      opacity: 0.5;
+      transform: translateY(0px);
+    }
+    100% {
+      opacity: 1;
+    }
+  }
+  
+  .bounce-enter {
+    animation: bounceIn 0.5s ease forwards;
+  }
+  
