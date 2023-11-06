@@ -38,6 +38,7 @@ Amplify.configure({
     },
   },
 });
+console.log(process.env.REACT_APP_ENV);
 const API = process.env.REACT_APP_API_URL;
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
