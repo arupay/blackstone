@@ -17,6 +17,7 @@ import NewRoom from "./Pages/NewRoom";
 import Bookings from "./Pages/Bookings";
 import ScrollToTop from "./Components/ScrollToTop";
 import Footer from "./Components/Footer";
+console.log(process.env.REACT_APP_ENV);
 
 Amplify.configure({
   Auth: {
@@ -38,7 +39,6 @@ Amplify.configure({
     },
   },
 });
-console.log(process.env.REACT_APP_ENV);
 const API = process.env.REACT_APP_API_URL;
 function App() {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
