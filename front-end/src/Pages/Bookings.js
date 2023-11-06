@@ -36,6 +36,9 @@ function Bookings(props) {
     setMyFutureBookings((currentBookings) =>
       currentBookings.filter((booking) => booking.id !== deletedBookingId)
     );
+    setFutureBookings((currentBookings) =>
+      currentBookings.filter((booking) => booking.id !== deletedBookingId)
+    );
   };
 
   return (

@@ -3,6 +3,7 @@ import { Form } from "react-bootstrap";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { convertToUTCString } from "../utilities/formatDate";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import axios from "axios";
 import { toast } from "react-toastify";
 import "./FindAvailableRooms.scss";
@@ -15,6 +16,13 @@ function FindAvailableRooms({ setRooms, fetchRooms, allFloors }) {
   const [floor, setFloor] = useState("");
   const [capacity, setCapacity] = useState(1);
 
+  const renderCheckmark = (condition) => {
+    return condition ? (
+      <IoMdCheckmarkCircleOutline color="green" size="2em" />
+    ) : (
+      <IoMdCheckmarkCircleOutline color="grey" size="2em" />
+    );
+  };
   const filterPassedTime = (time) => {
     const currentDate = new Date();
     const selectedDate = new Date(time);
@@ -84,7 +92,9 @@ function FindAvailableRooms({ setRooms, fetchRooms, allFloors }) {
       <Form onSubmit={handleFilterSubmit} className="formcontainer__newform">
         <div className="largegroup">
           <Form.Group className=" smallgroup">
-            <Form.Label>Start Date & Time:</Form.Label>
+            <Form.Label>
+              Start Date & Time: {renderCheckmark(startDate)}
+            </Form.Label>
 
             <DatePicker
               selected={startDate}
@@ -99,7 +109,7 @@ function FindAvailableRooms({ setRooms, fetchRooms, allFloors }) {
             />
           </Form.Group>
           <Form.Group className="smallgroup">
-            <Form.Label>End Date & Time:</Form.Label>
+            <Form.Label>End Date & Time: {renderCheckmark(endDate)}</Form.Label>
             {startDate ? (
               <DatePicker
                 selected={endDate}

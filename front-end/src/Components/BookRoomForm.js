@@ -6,6 +6,7 @@ import axios from "axios";
 import { useParams } from "react-router-dom";
 import { toast } from "react-toastify";
 import { BsPeople, BsBuilding } from "react-icons/bs";
+import { IoMdCheckmarkCircleOutline } from "react-icons/io";
 import "./BookRoomForm.scss";
 import SpinnerComponent from "./SpinnerComponent";
 const API = process.env.REACT_APP_API_URL;
@@ -22,6 +23,14 @@ function BookRoomForm(props) {
     const currentDate = new Date();
     const selectedDate = new Date(time);
     return currentDate.getTime() < selectedDate.getTime();
+  };
+
+  const renderCheckmark = (condition) => {
+    return condition ? (
+      <IoMdCheckmarkCircleOutline color="green" size="2em" />
+    ) : (
+      <IoMdCheckmarkCircleOutline color="grey" size="2em" />
+    );
   };
 
   const filterEndTime = (time) => {
@@ -164,7 +173,9 @@ function BookRoomForm(props) {
         </div>
         <div className="largegroupbrf" style={{ paddingTop: "125px" }}>
           <Form.Group className=" smallgroupbrf">
-            <Form.Label>Start Date & Time:</Form.Label>
+            <Form.Label>
+              Start Date & Time: {renderCheckmark(startDate)}
+            </Form.Label>
 
             <DatePicker
               selected={startDate}
@@ -179,7 +190,7 @@ function BookRoomForm(props) {
             />
           </Form.Group>
           <Form.Group className="smallgroupbrf">
-            <Form.Label>End Date & Time:</Form.Label>
+            <Form.Label>End Date & Time: {renderCheckmark(endDate)}</Form.Label>
             {startDate ? (
               <DatePicker
                 selected={endDate}
@@ -198,7 +209,9 @@ function BookRoomForm(props) {
           </Form.Group>
           <div className=" smallgroupbrf mt-2">
             <Form.Group>
-              <Form.Label>Meeting Name:</Form.Label>
+              <Form.Label>
+                Meeting Name: {renderCheckmark(meetingName)}
+              </Form.Label>
 
               <Form.Control
                 type="text"
