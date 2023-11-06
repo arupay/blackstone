@@ -61,7 +61,11 @@ function App() {
     } catch (err) {
       console.error("Error during authentication check: ", err);
       window.location.assign(
-        "https://roomlink.auth.us-east-1.amazoncognito.com/login?client_id=3ctcc7m5jerrasjmbec0p0haqk&response_type=code&scope=email+openid&redirect_uri=http%3A%2F%2Flocalhost%3A3000"
+        `https://roomlink.auth.us-east-1.amazoncognito.com/login?client_id=3ctcc7m5jerrasjmbec0p0haqk&response_type=code&scope=email+openid&redirect_uri=${
+          process.env.REACT_APP_ENV === "production"
+            ? "https://room-link.netlify.app/"
+            : "http://localhost:3000"
+        }`
       );
     }
   };
