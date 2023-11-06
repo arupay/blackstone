@@ -3,7 +3,7 @@ import { Navbar, Nav, Container } from "react-bootstrap";
 import { useNavigate, useLocation } from "react-router-dom";
 import roomlinklogotransparent from "../assets/roomlinklogo-transparent.png";
 
-function NavBar(props) {
+function NavBar({ signOut, isAuthenticated }) {
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -56,6 +56,16 @@ function NavBar(props) {
             >
               New Room
             </Nav.Link>
+            {isAuthenticated && (
+              <Nav.Link
+                className={`nav-text ${
+                  location.pathname === "/meetingrooms/new" ? "active" : ""
+                }`}
+                onClick={signOut}
+              >
+                Sign Out
+              </Nav.Link>
+            )}
           </Nav>
         </Navbar.Collapse>
       </Container>

@@ -55,6 +55,7 @@ bookings.post("/", async (req, res) => {
   }
 });
 
+//unchanged no auth yet
 bookings.put("/:id", async (req, res) => {
   const bookingId = req.params.id;
   const { start_date, end_date, attendees, meeting_name, meeting_room_id } =

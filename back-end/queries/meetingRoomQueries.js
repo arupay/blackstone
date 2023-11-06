@@ -49,12 +49,14 @@ const getFilteredRooms = async (start_date, end_date, capacity, floor) => {
       WHERE (start_date, end_date) OVERLAPS ($1, $2)
     )`;
 
-    if (capacity) { //add capacity to query string
+    if (capacity) {
+      //add capacity to query string
       query += ` AND capacity>= $${params.length + 1}`;
       params.push(capacity);
     }
 
-    if (floor) { //add floro to query string/ dynamic paramaetizaiton
+    if (floor) {
+      //add floro to query string/ dynamic paramaetizaiton
       query += ` AND floor = $${params.length + 1}`;
       params.push(floor);
     }
@@ -65,17 +67,18 @@ const getFilteredRooms = async (start_date, end_date, capacity, floor) => {
     return error;
   }
 };
-
-const createRoom = async (name, capacity, floor) => {
+const createRoom = async (name, capacity, floor, createdBy) => {
   try {
-    const newRoomQuery = `INSERT INTO meeting_room (name, capacity, floor)
-        VALUES ($1, $2, $3)
-        RETURNING *;
-        `;
-    const newRoom = await db.one(newRoomQuery, [name, capacity, floor]);
+    const newRoomQuery = `
+      INSERT INTO meeting_room (name, capacity, floor, created_by)
+      VALUES ($1, $2, $3, $4)
+      RETURNING *;
+    `;
+    const newRoom = await db.one(newRoomQuery, [name, capacity, floor, createdBy]);
     return newRoom;
   } catch (error) {
-    console.log(error.message || error);
+    console.error("Error creating new room:", error.message || error);
+    throw error; // Re-throw the error to be handled by the calling function
   }
 };
 

@@ -14,11 +14,26 @@ function NewRoom(props) {
   const navigate = useNavigate();
   const handleSubmit = (event) => {
     event.preventDefault();
+
+    const storedUserInfo = localStorage.getItem("userInfo");
+    if (!storedUserInfo) {
+      toast.error("User information is not available. Please log in again.");
+      return;
+    }
+
+    const { userId } = JSON.parse(storedUserInfo);
+    if (!userId) {
+      toast.error("User ID is not available. Please log in again.");
+      return;
+    }
+
     const roomData = {
       name: roomName,
       floor: floor,
       capacity: capacity,
+      created_by: userId, // Adding the userId from localStorage
     };
+
     axios
       .post(`${API}/meeting-rooms`, roomData)
       .then((response) => {
@@ -31,8 +46,8 @@ function NewRoom(props) {
         }, 2000);
       })
       .catch((error) => {
-        console.log(error);
-        // handle error, maybe show an error message to the user
+        console.error(error);
+        toast.error("Failed to add meeting room. Please try again.");
       });
   };
 

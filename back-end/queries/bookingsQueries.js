@@ -22,10 +22,16 @@ const hasConflictingBooking = async (
 const getBookings = async () => {
   try {
     const query = `
-      SELECT booking.*, meeting_room.floor, meeting_room.capacity, meeting_room.name as room_name
-      FROM booking
-      JOIN meeting_room ON booking.meeting_room_id = meeting_room.id;
-    `;
+    SELECT 
+      booking.*,
+      meeting_room.floor,
+      meeting_room.capacity,
+      meeting_room.name as room_name,
+      creator.email as creator_email  -- Alias the email as creator_email
+    FROM booking
+    JOIN meeting_room ON booking.meeting_room_id = meeting_room.id
+    JOIN users as creator ON booking.created_by = creator.id;  -- Join the users table aliased as creator
+  `;
 
     const bookingInfo = await db.any(query);
 
@@ -35,12 +41,17 @@ const getBookings = async () => {
 
     bookingInfo.forEach((booking) => {
       const endMoment = new Date(booking.end_date);
+
+      // Creating an array of attendees and including the creator's email
+      const attendeesArray = booking.attendees.split(";");
+      attendeesArray.push(booking.creator_email); // Adding the creator's email
+
       const bookingWithAttendees = {
         ...booking,
-        attendees: booking.attendees.split(";"),
+        attendees: attendeesArray,
       };
 
-      // checkint for end date already happening/occurring
+      // Checking for end date already happened/occurring
       if (endMoment < now) {
         pastBookings.push(bookingWithAttendees);
       } else {
@@ -63,33 +74,31 @@ const getBookings = async () => {
     return { error: true, message: "Database error." };
   }
 };
-
 const getBookingById = async (id) => {
   try {
     const query = `
       SELECT 
-        booking.id,
-        booking.start_date,
-        booking.end_date,
-        booking.attendees,
-        booking.meeting_name,
-        booking.meeting_room_id,
-        booking.created_on,
+        booking.*,
         meeting_room.name as room_name,
         meeting_room.capacity,
-        meeting_room.floor 
+        meeting_room.floor,
+        users.email as creator_email  -- Get creator's email
       FROM booking
       JOIN meeting_room ON booking.meeting_room_id = meeting_room.id
+      JOIN users ON booking.created_by = users.id  -- Join with users table
       WHERE booking.id = $1;
     `;
 
-    // Fetch the booking from the database
     const bookingInfo = await db.oneOrNone(query, [id]);
 
     if (bookingInfo) {
+      const attendeesArray = bookingInfo.attendees.split(";");
+      attendeesArray.push(bookingInfo.creator_email);
+
       return {
         ...bookingInfo,
-        attendees: bookingInfo.attendees.split(";"),
+        attendees: attendeesArray,
+        creator_email: bookingInfo.creator_email,
       };
     }
 
@@ -101,8 +110,14 @@ const getBookingById = async (id) => {
 };
 
 const createBooking = async (bookingData) => {
-  const { start_date, end_date, attendees, meeting_room_id, meeting_name } =
-    bookingData;
+  const {
+    start_date,
+    end_date,
+    attendees,
+    meeting_room_id,
+    meeting_name,
+    created_by,
+  } = bookingData;
   if (!meeting_name || !start_date || !end_date) {
     return { error: true, message: "Missing required booking information." };
   }
@@ -121,8 +136,15 @@ const createBooking = async (bookingData) => {
     }
 
     const newBooking = await db.one(
-      "INSERT INTO booking (start_date, end_date, attendees, meeting_name, meeting_room_id) VALUES ($1, $2, $3, $4, $5) RETURNING *",
-      [start_date, end_date, attendees, meeting_name, meeting_room_id]
+      "INSERT INTO booking (start_date, end_date, attendees, meeting_name, meeting_room_id, created_by) VALUES ($1, $2, $3, $4, $5, $6) RETURNING *",
+      [
+        start_date,
+        end_date,
+        attendees,
+        meeting_name,
+        meeting_room_id,
+        created_by,
+      ] // Inserting the user_id directly
     );
     return { success: true, payload: newBooking };
   } catch (error) {

@@ -83,21 +83,31 @@ function BookRoomForm(props) {
       return;
     }
 
-    const startUTC = startDate.toISOString();
-    const endUTC = endDate.toISOString();
-
-    if (startDate >= endDate) {
-      toast.error("End date cannot be before start date.");
+    // Retrieve userInfo from localStorage and parse it
+    const storedUserInfo = localStorage.getItem("userInfo");
+    if (!storedUserInfo) {
+      toast.error("User information is not available. Please log in again.");
       return;
     }
+
+    const { userId } = JSON.parse(storedUserInfo);
+    if (!userId) {
+      toast.error("User ID is not available. Please log in again.");
+      return;
+    }
+
+    const startUTC = startDate.toISOString();
+    const endUTC = endDate.toISOString();
     const attendeesString = attendeesList.join(";");
 
+    // Include the userId in the bookingData
     const bookingData = {
       meeting_name: meetingName,
       start_date: startUTC,
       end_date: endUTC,
       attendees: attendeesString,
       meeting_room_id: id,
+      created_by: userId, // Adding the userId from localStorage
     };
 
     axios
@@ -105,10 +115,7 @@ function BookRoomForm(props) {
       .then((response) => {
         toast.success("Booking successful");
         props.fetchBookings();
-        setStartDate(null);
-        setEndDate(null);
-        localStorage.removeItem("startDate");
-        localStorage.removeItem("endDate");
+        clearForm();
         window.scrollTo({
           top: document.documentElement.scrollHeight,
           behavior: "smooth", // Optional: defines the transition animation

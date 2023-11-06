@@ -6,14 +6,15 @@ create database blackstone;
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
-    email TEXT NOT NULL
+    email TEXT NOT NULL UNIQUE
 );
 
 CREATE TABLE meeting_room (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     floor INT NOT NULL,
-    capacity INT NOT NULL
+    capacity INT NOT NULL,
+    created_by INT NOT NULL REFERENCES users(id)
 );
 
 CREATE TABLE booking (
@@ -23,5 +24,6 @@ CREATE TABLE booking (
     attendees VARCHAR(255) NOT NULL,
     meeting_name VARCHAR(255) NOT NULL,
     meeting_room_id INT NOT NULL REFERENCES meeting_room(id) ON DELETE CASCADE,
-    created_on TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP
+    created_on TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    created_by INT NOT NULL REFERENCES users(id)
 );

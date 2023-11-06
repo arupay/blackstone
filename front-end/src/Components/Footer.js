@@ -15,17 +15,17 @@ function Footer(props) {
           <div className="item col-xs-12 col-sm-6 col-md-3 ">
             <h6>Backend</h6>
             <ul className="list-unstyled">
-              <li>AWS RDS</li>
-              <li>Postgres</li>
-              <li>JWToken</li>
+              <li>AWS RDS & Postgres</li>
+              <li>Express & Node.js</li>
+              <li>AWS Amplify & AWS Cognito</li>
             </ul>
           </div>
           <div className="item col-xs-12 col-sm-6 col-md-3">
             <h6>Frontend</h6>
             <ul className="list-unstyled">
-              <li>React</li>
-              <li>SCSS</li>
-              <li>Dall-E 3 Images</li>
+              <li>React & Javascript</li>
+              <li>SCSS & Bootstrap</li>
+              <li>Dall-E AI Images</li>
             </ul>
           </div>
           <div className="item col-xs-12 col-sm-6 col-md-3">

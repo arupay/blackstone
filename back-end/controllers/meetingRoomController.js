@@ -88,12 +88,12 @@ meetingRooms.get("/:id/bookings", async (req, res) => {
 });
 
 meetingRooms.post("/", async (req, res) => {
-  const { name, capacity, floor } = req.body;
+  const { name, capacity, floor, created_by } = req.body;
   try {
-    const newRoom = await createRoom(name, capacity, floor);
-    res.status(200).json({ success: true, payload: newRoom });
+    const newRoom = await createRoom(name, capacity, floor, created_by);
+    res.status(201).json({ success: true, payload: newRoom }); // Status code 201 for resource creation
   } catch (error) {
-    console.log(error.message || error);
+    console.error(error.message || error);
     res.status(500).json({ success: false, message: "Could not make room" });
   }
 });
